@@ -18,6 +18,9 @@ Turn a **locked Sunmi V2 PRO** payment terminal into a **general-purpose Android
 | Matrix "VELTEIN" home screen | custom WebView launcher app (`apps/veltein_home`) |
 | POS printer **form** app | binds Sunmi's printer AIDL (`apps/veltein_print`) |
 | Linux server (web + SSH + dashboard) | **Termux** running nginx, OpenSSH, Python (`server/`) |
+| **Live** SERVER-MODE home screen | home WebView pulls real per-core CPU / RAM from `stats.json` every 2s |
+| Terminal dashboard with **hack-sequence intro** | `server/dashboard.py` — typewriter steps, decrypt bar, then live telemetry |
+| **One-click provisioning** of a fresh unit | `provision.bat` → installs apps + sets up the server automatically |
 
 ## The key insight (how the lock is beaten)
 
@@ -37,21 +40,34 @@ else is just ADB + Termux. See [`docs/unlock-method.md`](docs/unlock-method.md).
 ## Repo layout
 
 ```
+provision.bat        one-click Windows entry point (double-click)
 apps/
   veltein_print/   POS printer form app (Sunmi IWoyouService AIDL)
-  veltein_home/    Matrix WebView home-screen launcher (+ bundled page)
+  veltein_home/    live SERVER-MODE WebView home launcher (+ bundled page)
 server/
   index.html       hacker/Matrix VELTEIN web page (served by nginx)
-  dashboard.py     live CPU/RAM/battery dashboard (shown on SSH login)
-  default_nginx.conf
-  start-server.sh  start nginx + sshd inside Termux
+  dashboard.py     terminal dashboard: hack-sequence intro + live telemetry
+  stats.py         writes live stats.json (per-core CPU, RAM, SWAP, IP)
+  authorized_keys  provisioning SSH public key
+  boot/            Termux:Boot autostart script (sshd + nginx + stats)
+  default_nginx.conf  start-server.sh
 scripts/
-  build_apk.sh     manual APK build (no gradle): aidl->javac->d8->aapt2->sign
+  provision.sh         waits for device, installs apps, provisions server
+  termux_bootstrap.sh  on-device installer (fetched over HTTPS)
+  build_apk.sh         manual APK build (no gradle): aidl->javac->d8->aapt2->sign
 docs/
   unlock-method.md server-setup.md build-apps.md
+  termux-install.md live-dashboard-autostart.md
 ```
 
-## Quick start
+## Quick start — one click (recommended)
+
+1. **Unlock & authorize ADB** once (factory-reset trick) — [`docs/unlock-method.md`](docs/unlock-method.md).
+2. Put the `.apk` files next to this repo folder, connect the POS, and **double-click `provision.bat`**
+   (or run `bash scripts/provision.sh`). It waits for the device, installs Termux + both apps,
+   sets the home launcher, provisions the server, and verifies the live dashboard.
+
+## Quick start — manual
 
 1. **Unlock & authorize ADB** — [`docs/unlock-method.md`](docs/unlock-method.md)
 2. **Install apps & set launcher** — same doc (ADB one-liners)
