@@ -63,9 +63,13 @@ docs/
 ## Quick start — one click (recommended)
 
 1. **Unlock & authorize ADB** once (factory-reset trick) — [`docs/unlock-method.md`](docs/unlock-method.md).
-2. Put the `.apk` files next to this repo folder, connect the POS, and **double-click `provision.bat`**
-   (or run `bash scripts/provision.sh`). It waits for the device, installs Termux + both apps,
-   sets the home launcher, provisions the server, and verifies the live dashboard.
+2. Connect the POS and **double-click `provision.bat`** (or run `bash scripts/provision.sh`).
+
+Nothing to prepare — the installer is self-contained. It **auto-downloads** everything it
+needs with a progress bar (Termux from its official release, the VELTEIN apps from this repo's
+`prebuilt/`, cached in `.payload/`), then: waits for the device, installs Termux + Termux:Boot +
+both VELTEIN apps, sets the home launcher, provisions the server inside Termux, and verifies the
+live dashboard. Only prerequisites on the PC: `adb` and `curl` (both ship with the usual tooling).
 
 ## Quick start — manual
 

@@ -5,6 +5,8 @@
 **/classes2/
 **/assetroot/
 *.apk
+!prebuilt/*.apk
+.payload/
 *.dex
 # secrets - NEVER commit
 *.ks
