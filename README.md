@@ -55,6 +55,7 @@ docs/
 
 1. **Unlock & authorize ADB** — [`docs/unlock-method.md`](docs/unlock-method.md)
 2. **Install apps & set launcher** — same doc (ADB one-liners)
+2b. **Install Termux** — [`docs/termux-install.md`](docs/termux-install.md)
 3. **Build the two apps** — [`docs/build-apps.md`](docs/build-apps.md) / `scripts/build_apk.sh`
 4. **Set up the server** — [`docs/server-setup.md`](docs/server-setup.md)
 
