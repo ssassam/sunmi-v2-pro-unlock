@@ -1,9 +1,9 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # VELTEIN on-device installer. Fetched and run inside Termux:
 #   pkg update -y && pkg install -y wget && \
-#   wget -qO- https://raw.githubusercontent.com/ssassam/sunmi-v2-pro-unlock/main/scripts/termux_bootstrap.sh | bash
+#   wget -qO- https://raw.githubusercontent.com/ssassam/sunmi-v2-pro-unlock/master/scripts/termux_bootstrap.sh | bash
 set -e
-RAW="https://raw.githubusercontent.com/ssassam/sunmi-v2-pro-unlock/main"
+RAW="https://raw.githubusercontent.com/ssassam/sunmi-v2-pro-unlock/master"
 P="$PREFIX"; WWW="$P/share/nginx/html"
 
 echo "[VELTEIN] installing packages (nginx, openssh, python)..."

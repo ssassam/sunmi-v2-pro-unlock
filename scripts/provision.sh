@@ -12,7 +12,7 @@ HERE="$(cd "$(dirname "$0")/.." && pwd)"        # repo root
 APK_DIR="${APK_DIR:-$(cd "$HERE/.." && pwd)}"   # where the APKs are
 KEY="${KEY:-$APK_DIR/sunmi_key}"
 [ -f "$KEY" ] || KEY="$APK_DIR/rom_flash/downloads/sunmi_key"
-RAW_BOOT='pkg update -y && pkg install -y wget && wget -qO- https://raw.githubusercontent.com/ssassam/sunmi-v2-pro-unlock/main/scripts/termux_bootstrap.sh | bash'
+RAW_BOOT='pkg update -y && pkg install -y wget && wget -qO- https://raw.githubusercontent.com/ssassam/sunmi-v2-pro-unlock/master/scripts/termux_bootstrap.sh | bash'
 
 # APK -> package name
 TERMUX_APK="$APK_DIR/termux_v0.118.0_armv7.apk"
