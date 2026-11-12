@@ -1,92 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VELTEIN Server - FAFOFI CORP</title>
-    <style>
-        :root { --grn: #00ff6a; --grn-dim: #0a3d22; }
-        * { box-sizing: border-box; }
-        html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
-        body {
-            color: var(--grn);
-            font-family: "Courier New", monospace;
-            display: flex; justify-content: center; align-items: center; min-height: 100vh;
-        }
-        #matrix { position: fixed; inset: 0; z-index: 0; display: block; }
-        .scanlines { position: fixed; inset: 0; z-index: 1; pointer-events: none;
-            background: repeating-linear-gradient(0deg, rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,0.25) 3px); }
-        .card {
-            position: relative; z-index: 2;
-            background: rgba(0, 10, 2, 0.82);
-            border: 1px solid var(--grn);
-            box-shadow: 0 0 24px rgba(0,255,106,0.35), inset 0 0 20px rgba(0,255,106,0.08);
-            border-radius: 6px; padding: 30px 34px; max-width: 520px; width: 92%;
-            text-align: center; backdrop-filter: blur(1.5px);
-        }
-        .badge { display: inline-block; border: 1px solid var(--grn); color: var(--grn);
-            padding: 5px 14px; border-radius: 3px; font-size: 12px; font-weight: 700;
-            letter-spacing: 2px; margin-bottom: 18px; text-shadow: 0 0 8px var(--grn); }
-        .blink { animation: blink 1s steps(2) infinite; }
-        @keyframes blink { 50% { opacity: 0.25; } }
-        h1 { font-size: 52px; margin: 0; letter-spacing: 8px; color: #baffd4;
-            text-shadow: 0 0 10px var(--grn), 0 0 28px var(--grn); }
-        .glitch { position: relative; }
-        .glitch::before, .glitch::after { content: "VELTEIN"; position: absolute; left: 0; top: 0; width: 100%; }
-        .glitch::before { color: #00fff2; transform: translateX(-2px); mix-blend-mode: screen; opacity: .6; animation: g1 2.5s infinite; }
-        .glitch::after { color: #ff003c; transform: translateX(2px); mix-blend-mode: screen; opacity: .6; animation: g2 2.9s infinite; }
-        @keyframes g1 { 0%,92%,100%{clip-path:inset(0 0 0 0)} 94%{clip-path:inset(20% 0 60% 0)} 96%{clip-path:inset(70% 0 10% 0)} }
-        @keyframes g2 { 0%,90%,100%{clip-path:inset(0 0 0 0)} 93%{clip-path:inset(55% 0 25% 0)} 97%{clip-path:inset(10% 0 75% 0)} }
-        .slogan { color: var(--grn); font-size: 13px; font-weight: 700; letter-spacing: 5px; margin: 8px 0 22px; opacity: .85; }
-        .specs { border: 1px dashed var(--grn-dim); border-radius: 4px; padding: 14px 16px;
-            text-align: left; font-size: 13.5px; line-height: 1.85; color: #7dffb0; background: rgba(0,0,0,0.4); }
-        .specs b { color: #00fff2; font-weight: 700; }
-        .ok { color: var(--grn); text-shadow: 0 0 8px var(--grn); }
-        .footer { margin-top: 20px; font-size: 11px; color: #3ea86a; letter-spacing: 1px; }
-        .prompt { margin-top: 14px; font-size: 13px; color: var(--grn); text-align: left; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VELTEIN Server - FAFOFI CORP</title>
+<style>
+    :root { --grn:#00ff6a; --dim:#0a3d22; --cyan:#00fff2; --mag:#ff3df0; }
+    * { box-sizing:border-box; }
+    html,body { margin:0; height:100%; background:#000; overflow:hidden; }
+    body { color:var(--grn); font-family:"Courier New",monospace;
+        display:flex; justify-content:center; align-items:center; min-height:100vh; }
+    #matrix { position:fixed; inset:0; z-index:0; display:block; }
+    .scan { position:fixed; inset:0; z-index:1; pointer-events:none;
+        background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.28) 3px); }
+    .card { position:relative; z-index:2; background:rgba(0,10,2,.84);
+        border:1px solid var(--grn); border-radius:6px; padding:18px 20px 16px;
+        max-width:560px; width:94%;
+        box-shadow:0 0 26px rgba(0,255,106,.35), inset 0 0 20px rgba(0,255,106,.08);
+        backdrop-filter:blur(1.5px); }
+    .top { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:4px; }
+    .dot { width:11px; height:11px; border-radius:50%; background:var(--grn);
+        box-shadow:0 0 10px var(--grn); display:inline-block; margin-right:8px;
+        animation:pulse 1.2s infinite; vertical-align:middle; }
+    @keyframes pulse { 50%{opacity:.25; transform:scale(.7);} }
+    .online { font-size:16px; font-weight:700; letter-spacing:1.5px; color:var(--grn);
+        text-shadow:0 0 8px var(--grn); }
+    .clock { font-size:14px; color:var(--cyan); letter-spacing:1px; }
+    h1 { font-size:38px; margin:8px 0 2px; letter-spacing:7px; color:#baffd4;
+        text-align:center; text-shadow:0 0 10px var(--grn),0 0 26px var(--grn); position:relative; }
+    h1::before,h1::after { content:"VELTEIN"; position:absolute; left:0; right:0; top:0; }
+    h1::before { color:var(--cyan); transform:translateX(-2px); mix-blend-mode:screen; opacity:.55; animation:g1 2.6s infinite; }
+    h1::after { color:#ff003c; transform:translateX(2px); mix-blend-mode:screen; opacity:.55; animation:g2 3s infinite; }
+    @keyframes g1 { 0%,92%,100%{clip-path:inset(0 0 0 0)} 94%{clip-path:inset(20% 0 60% 0)} 96%{clip-path:inset(70% 0 10% 0)} }
+    @keyframes g2 { 0%,90%,100%{clip-path:inset(0 0 0 0)} 93%{clip-path:inset(55% 0 25% 0)} 97%{clip-path:inset(10% 0 75% 0)} }
+    .slogan { text-align:center; font-size:11px; letter-spacing:5px; color:var(--grn); opacity:.85; margin-bottom:12px; }
+    .sec { color:var(--mag); font-size:12px; font-weight:700; letter-spacing:1.5px; margin:12px 0 6px;
+        text-shadow:0 0 6px rgba(255,61,240,.6); }
+    .meta { font-size:12px; line-height:1.7; color:#7dffb0; }
+    .meta b { color:var(--cyan); }
+    .row { display:flex; align-items:center; font-size:12.5px; margin:3px 0; }
+    .lbl { width:68px; color:#baffd4; flex:0 0 auto; }
+    .bar { flex:1; height:13px; border:1px solid var(--grn); border-radius:2px; overflow:hidden;
+        background:repeating-linear-gradient(90deg,rgba(0,255,106,.06) 0 3px,transparent 3px 6px); margin:0 8px; }
+    .fill { height:100%; width:0%; background:linear-gradient(90deg,#0a3,#00ff6a);
+        box-shadow:0 0 8px var(--grn); transition:width .25s linear; }
+    .fill.ram { background:linear-gradient(90deg,#066,#00fff2); box-shadow:0 0 8px var(--cyan); }
+    .fill.swp { background:linear-gradient(90deg,#640,#ffb000); box-shadow:0 0 8px #ffb000; }
+    .pct { width:42px; text-align:right; color:var(--grn); flex:0 0 auto; }
+    .pct.c { color:var(--cyan); }
+    .foot { margin-top:12px; font-size:10.5px; color:#3ea86a; letter-spacing:1px; text-align:center; }
+    .blink { animation:blink 1s steps(2) infinite; } @keyframes blink{50%{opacity:.25}}
+    .tap { font-size:10px; color:#2e7d50; text-align:center; margin-top:6px; }
+</style>
 </head>
 <body>
-    <canvas id="matrix"></canvas>
-    <div class="scanlines"></div>
-    <div class="card">
-        <div class="badge">&#9679; ACCESS GRANTED &mdash; NODE ONLINE</div>
-        <h1 class="glitch">VELTEIN</h1>
-        <div class="slogan">UNDER FAFOFI CORP</div>
-        <div class="specs">
-            <div><b>HOST:</b> SUNMI V2 PRO</div>
-            <div><b>CPU :</b> Snapdragon 425 (4x 1.4 GHz)</div>
-            <div><b>RAM :</b> 2 GB LPDDR3</div>
-            <div><b>OS  :</b> Termux / Linux 3.18 (armv7l)</div>
-            <div><b>WEB :</b> nginx 1.31 &mdash; port 8080 <span class="ok">[ACTIVE]</span></div>
-            <div><b>SSH :</b> port 8022 <span class="ok">[ACTIVE]</span></div>
-        </div>
-        <div class="prompt">root@veltein:~# access --status<br>&gt; secure shell ready<span class="blink">_</span></div>
-        <div class="footer">VELTEIN &bull; FAFOFI CORP &copy; 2026 &bull; ALL SYSTEMS NOMINAL</div>
+<canvas id="matrix"></canvas>
+<div class="scan"></div>
+<div class="card">
+    <div class="top">
+        <div><span class="dot"></span><span class="online">SERVER NODE ONLINE</span></div>
+        <div class="clock" id="clk">--:--:--</div>
     </div>
-    <script>
-        const c = document.getElementById('matrix'), x = c.getContext('2d');
-        let cols, drops;
-        const chars = 'VELTEINFAFOFI01<>/[]{}#*アイウエオカキクケコｱｲｳｴｵ'.split('');
-        function resize() {
-            c.width = innerWidth; c.height = innerHeight;
-            cols = Math.floor(c.width / 14);
-            drops = new Array(cols).fill(1).map(() => Math.random() * c.height / 14);
-        }
-        function draw() {
-            x.fillStyle = 'rgba(0,0,0,0.08)'; x.fillRect(0, 0, c.width, c.height);
-            x.font = '14px monospace';
-            for (let i = 0; i < cols; i++) {
-                const ch = chars[Math.floor(Math.random() * chars.length)];
-                const px = i * 14, py = drops[i] * 14;
-                x.fillStyle = Math.random() < 0.02 ? '#d6ffe6' : '#00ff6a';
-                x.fillText(ch, px, py);
-                if (py > c.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            }
-        }
-        addEventListener('resize', resize); resize();
-        setInterval(draw, 55);
-    </script>
+    <h1>VELTEIN</h1>
+    <div class="slogan">UNDER FAFOFI CORP</div>
+
+    <div class="meta">
+        <div><b>HOST</b> SUNMI V2 PRO &nbsp; <b>CPU</b> Snapdragon 425 4x1.4GHz</div>
+        <div><b>NET</b> <span id="ip">192.168.110.94</span> &nbsp; <b>WEB</b> :8080 &nbsp; <b>SSH</b> :8022 &nbsp; <b>UP</b> <span id="up">00:00:00</span></div>
+    </div>
+
+    <div class="sec">[ CPU CORES LOAD ]</div>
+    <div id="cores"></div>
+
+    <div class="sec">[ MEMORY ]</div>
+    <div class="row"><div class="lbl">RAM</div><div class="bar"><div class="fill ram" id="ramb"></div></div><div class="pct c" id="ramp">0%</div></div>
+    <div class="row"><div class="lbl">SWAP</div><div class="bar"><div class="fill swp" id="swpb"></div></div><div class="pct" id="swpp">0%</div></div>
+
+    <div class="foot" id="src">root@veltein:~# monitor --live<span class="blink">_</span></div>
+    <div class="tap">VELTEIN &bull; FAFOFI CORP &copy; 2026 &mdash; double-tap to open apps</div>
+</div>
+
+<script>
+/* ---- CPU cores ---- */
+var NCORES = 4;
+var cur = [], tgt = [];
+var coresEl = document.getElementById('cores');
+for (var i=0;i<NCORES;i++){
+    cur.push(5); tgt.push(5);
+    var r=document.createElement('div'); r.className='row';
+    r.innerHTML='<div class="lbl">Core '+i+'</div><div class="bar"><div class="fill" id="c'+i+'"></div></div><div class="pct" id="p'+i+'">0%</div>';
+    coresEl.appendChild(r);
+}
+var ramC=18, ramT=18, swpC=2, swpT=2, live=false, t0=Date.now();
+
+/* ---- try real stats from local server; else drift to look alive ---- */
+function pull(){
+    fetch('http://127.0.0.1:8080/stats.json',{cache:'no-store'})
+      .then(function(r){return r.json();})
+      .then(function(d){
+        live=true;
+        if(d.cores&&d.cores.length){ for(var i=0;i<NCORES;i++) tgt[i]=Math.max(0,Math.min(100, d.cores[i%d.cores.length]||0)); }
+        if(typeof d.ram==='number') ramT=d.ram;
+        if(typeof d.swap==='number') swpT=d.swap;
+        if(d.ip) document.getElementById('ip').textContent=d.ip;
+        document.getElementById('src').innerHTML='root@veltein:~# monitor --live &bull; REAL <span class="blink">_</span>';
+      })
+      .catch(function(){
+        live=false;
+        for(var i=0;i<NCORES;i++){ tgt[i]=Math.max(0,Math.min(96, tgt[i]+(Math.random()*40-20))); }
+        ramT=Math.max(28,Math.min(72, ramT+(Math.random()*8-4)));
+        swpT=Math.max(0,Math.min(14, swpT+(Math.random()*4-2)));
+        document.getElementById('src').innerHTML='root@veltein:~# monitor --live<span class="blink">_</span>';
+      });
+}
+pull(); setInterval(pull, 2000);
+
+/* ---- smooth animation loop ---- */
+function ease(a,b){ return a+(b-a)*0.12; }
+function pad(n){ return (n<10?'0':'')+n; }
+function anim(){
+    for(var i=0;i<NCORES;i++){
+        cur[i]=ease(cur[i],tgt[i]);
+        var v=Math.round(cur[i]);
+        document.getElementById('c'+i).style.width=v+'%';
+        var p=document.getElementById('p'+i); p.textContent=v+'%';
+        p.style.color = v>80?'#ff4d4d':(v>50?'#ffb000':'#00ff6a');
+    }
+    ramC=ease(ramC,ramT); swpC=ease(swpC,swpT);
+    document.getElementById('ramb').style.width=Math.round(ramC)+'%';
+    document.getElementById('ramp').textContent=Math.round(ramC)+'%';
+    document.getElementById('swpb').style.width=Math.round(swpC)+'%';
+    document.getElementById('swpp').textContent=Math.round(swpC)+'%';
+    requestAnimationFrame(anim);
+}
+anim();
+
+/* ---- clocks ---- */
+setInterval(function(){
+    var d=new Date();
+    document.getElementById('clk').textContent=pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
+    var s=Math.floor((Date.now()-t0)/1000);
+    document.getElementById('up').textContent=pad(Math.floor(s/3600))+':'+pad(Math.floor(s/60)%60)+':'+pad(s%60);
+},1000);
+
+/* ---- matrix rain ---- */
+var c=document.getElementById('matrix'), x=c.getContext('2d'), cols, drops;
+var chars='VELTEINFAFOFI01<>/[]{}#*アイウエオカキクケコｱｲｳｴｵ'.split('');
+function resize(){ c.width=innerWidth; c.height=innerHeight; cols=Math.floor(c.width/14);
+    drops=new Array(cols).fill(1).map(function(){return Math.random()*c.height/14;}); }
+function rain(){ x.fillStyle='rgba(0,0,0,0.08)'; x.fillRect(0,0,c.width,c.height); x.font='14px monospace';
+    for(var i=0;i<cols;i++){ var ch=chars[Math.floor(Math.random()*chars.length)];
+        x.fillStyle=Math.random()<0.02?'#d6ffe6':'#00ff6a';
+        x.fillText(ch,i*14,drops[i]*14);
+        if(drops[i]*14>c.height&&Math.random()>0.975) drops[i]=0; drops[i]++; } }
+addEventListener('resize',resize); resize(); setInterval(rain,55);
+</script>
 </body>
 </html>
