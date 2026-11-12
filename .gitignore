@@ -1,0 +1,15 @@
+# build artifacts
+**/build/
+**/gen/
+**/classes/
+**/classes2/
+**/assetroot/
+*.apk
+*.dex
+# secrets - NEVER commit
+*.ks
+*.keystore
+sunmi_key
+sunmi_key.pub
+*.pem
+mf_cookies.txt
